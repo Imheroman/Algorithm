@@ -20,7 +20,7 @@
 
 <p>예를 들어보자. 아래 그림은 가로 7개, 세로 6개 좌석으로 구성된 7×6격자형 좌석배치를 보여주고 있다. 그림에서 각 단위 사각형은 개별 좌석을 나타내며, 그 안에 표시된 값 (x,y)는 해당 좌석의 번호를 나타낸다. 가장 왼쪽 아래의 좌석번호는 (1,1)이며, 가장 오른쪽 위 좌석의 번호는 (7,6)이다. </p>
 
-<table class="table table-bordered td-center" style="width:35%">
+<table class="table table-bordered td-center" style="width:70%">
 	<tbody>
 		<tr>
 			<td style="width:5%;">(1, 6)</td>
@@ -85,7 +85,7 @@
 
 <p>아래 그림은 7×6공연장에서 대기번호 1번부터 42번까지의 관객이 좌석에 배정된 결과를 보여주고 있다.</p>
 
-<table class="table table-bordered td-center" style="width:35%">
+<table class="table table-bordered td-center" style="width:60%">
 	<tbody>
 		<tr>
 			<td style="width:5%;">6</td>
