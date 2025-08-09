@@ -9,31 +9,27 @@ public class Main {
 		st = new StringTokenizer(br.readLine());
 		int N = Integer.parseInt(st.nextToken()), M = Integer.parseInt(st.nextToken());
 		
-		List<Integer>[] people = new ArrayList[M];
+		int[] problems = new int[M];
 		for (int i = 0; i < M; i++) {
 			st = new StringTokenizer(br.readLine());
-			int count = Integer.parseInt(st.nextToken());
-			people[i] = new ArrayList<>();
+			st.nextToken();  // count 필요 없어서 버리기 ,,
 			while (st.hasMoreTokens())
-				people[i].add(Integer.parseInt(st.nextToken()));
+				problems[i] |= 1 << Integer.parseInt(st.nextToken());
 		}
 
-		int answer = Integer.MAX_VALUE, team = 0;
-		Set<Integer> problems = new HashSet<>();
+		int answer = Integer.MAX_VALUE, team = 0, target = (1 << (N + 1)) - 2;
 		for (int selected = 1; selected < 1 << M; selected++) {
+			int result = 0;
 			for (int person = 0; person < M; person++) {
 				if ((selected & (1 << person)) != 0) {
 					team++;
-					for (int problem : people[person]) {
-						problems.add(problem);
-					}
+					result |= problems[person];
 				}
 			}
 			
-			if (problems.size() == N) {
+			if (result == target) {
 				answer = Math.min(answer, team);				
 			}
-			problems.clear();
 			team = 0;
 		}
 		
