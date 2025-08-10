@@ -7,11 +7,11 @@ public class Main {
 	static int[] numbers;
 	static int N, M;
 	static StringBuilder sb = new StringBuilder();
-	static ArrayDeque<Integer> repository = new ArrayDeque<>();  
+	static int[] repository;
 
 	public static void main(String[] args) throws IOException {
 		init();
-		solve();
+		solve(new boolean[N], 0);
 		System.out.println(sb);
 	}
 	
@@ -20,6 +20,7 @@ public class Main {
 		N = Integer.parseInt(st.nextToken());
 		M = Integer.parseInt(st.nextToken());
 		numbers = new int[N];
+		repository = new int[M]; 
 		
 		st = new StringTokenizer(br.readLine());
 		for (int i = 0; i < N; i++) {
@@ -28,22 +29,24 @@ public class Main {
 		Arrays.sort(numbers);
 	}
 	
-	public static void solve() {
-		if (repository.size() == M) {
+	public static void solve(boolean[] selected, int depth) {
+		if (depth == M) {
 			for (int number : repository) {
 				sb.append(number).append(" ");
 			}
 			sb.append("\n");
+			return;
 		}
 		
 		for (int i = 0; i < N; i++) {
-			if (repository.contains(numbers[i])) {
+			if (selected[i]) {
 				continue;
 			}
 			
-			repository.offer(numbers[i]);
-			solve();
-			repository.pollLast();
+			repository[depth] = numbers[i];
+			selected[i] = true;
+			solve(selected, depth + 1);
+			selected[i] = false;
 		}
 	}
 }
