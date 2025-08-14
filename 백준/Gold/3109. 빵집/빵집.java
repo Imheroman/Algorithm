@@ -3,7 +3,6 @@ import java.util.*;
 
 public class Main {
 	private static final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-	static boolean result;
 	static int R, C, answer = 0;
 	static int[][] graphs;
 	static int[][] DIRECTIONS = { { -1, 1 }, { 0, 1 }, { 1, 1 } };
@@ -34,7 +33,6 @@ public class Main {
 		for (int r = 0; r < R; r++) {
 			if (graphs[r][START_COL] == 0) {
 				++answer;
-				result = false;
 				graphs[r][START_COL] = answer;
 				if (!dfs(r, START_COL)) {
 					--answer;
@@ -45,19 +43,20 @@ public class Main {
 
 	static boolean dfs(int r, int c) {
 		if (c == C - 1) {
-			result = true;
-			return result;
+			return true;
 		}
 
 		for (int[] d : DIRECTIONS) {
 			int nx = r + d[0], ny = c + d[1];
 
-			if (0 <= nx && nx < R && 0 <= ny && ny < C && graphs[nx][ny] == 0 && !result) {
+			if (0 <= nx && nx < R && 0 <= ny && ny < C && graphs[nx][ny] == 0) {
 				graphs[nx][ny] = answer;
-				dfs(nx, ny);
+				if (dfs(nx, ny)) {
+					return true;
+				}
 			}
 		}
 
-		return result;
+		return false;
 	}
 }
