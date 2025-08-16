@@ -3,34 +3,33 @@ import java.util.*;
 
 public class Main {
 	private static final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-	private static StringTokenizer st;
+	static int N, M;
+	static int[] numbers;
+	static StringBuilder sb = new StringBuilder();
 
 	public static void main(String[] args) throws IOException {
-		st = input();
-		int N = getInt(st), M = getInt(st);
-		
-		st = input();
-		int[] numbers = new int[N + 1];
-		
+		init();
+		solve();
+		System.out.println(sb);
+	}
+
+	static void init() throws IOException { // 입력 받는 메소드입니다.
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		N = Integer.parseInt(st.nextToken());
+		M = Integer.parseInt(st.nextToken());
+
+		numbers = new int[N + 1];
+		st = new StringTokenizer(br.readLine());
 		for (int i = 1; i <= N; i++) {
-			numbers[i] = getInt(st) + numbers[i - 1];
+			numbers[i] = numbers[i - 1] + Integer.parseInt(st.nextToken());
 		}
-		
-		StringBuilder answer = new StringBuilder(); 
+	}
+
+	static void solve() throws IOException {
 		for (int t = 0; t < M; t++) {
-			st = input();
-			int start = getInt(st), end = getInt(st);
-			answer.append(numbers[end] - numbers[start - 1]).append("\n");
+			StringTokenizer st = new StringTokenizer(br.readLine());
+			int pre = Integer.parseInt(st.nextToken()) - 1, post = Integer.parseInt(st.nextToken());
+			sb.append(numbers[post] - numbers[pre]).append("\n");
 		}
-		
-		System.out.println(answer);
-	}
-	
-	public static StringTokenizer input() throws IOException {
-		return new StringTokenizer(br.readLine());
-	}
-	
-	public static int getInt(StringTokenizer s) {
-		return Integer.parseInt(s.nextToken());
 	}
 }
