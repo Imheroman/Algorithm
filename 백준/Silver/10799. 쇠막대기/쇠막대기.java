@@ -16,9 +16,9 @@ public class Main {
 	public static void solve() {
 		int cnt = 0, ans = 0;
 		
-		for (int i = 1; i < letters.length; i++) {
+		for (int i = 0; i < letters.length; i++) {
 			if (letters[i] == '(') ++cnt;
-			else if (letters[i - 1] == '(' && letters[i] == ')') ans += cnt--;
+			else if (letters[i - 1] == '(' && letters[i] == ')') ans += --cnt;
 			else if(letters[i - 1] == ')' && letters[i] == ')') {
 				--cnt;
 				++ans;
