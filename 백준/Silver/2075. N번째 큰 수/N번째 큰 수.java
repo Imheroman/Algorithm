@@ -5,26 +5,27 @@ public class Main {
 	static BufferedReader br;
 	static StringTokenizer st;
 	static int N;
-	static int[] numbers;
+	static Queue<Integer> queue;
 
 	public static void main(String[] args) throws IOException {
 		br = new BufferedReader(new InputStreamReader(System.in));
 		init();
-		System.out.println(numbers[N * N - N]);
+		solve();
 	}
 
 	public static void init() throws IOException {  // 입력 받기
+		queue = new PriorityQueue<>((a, b) -> Integer.compare(b, a));
+
 		N = Integer.parseInt(br.readLine());
 		
-		numbers = new int[N * N];
-		int index;
 		for (int i = 0; i < N; i++) {
 			st = new StringTokenizer(br.readLine());
-			index = i * N;
-
-			for (int j = 0; j < N; j++) numbers[index + j] = Integer.parseInt(st.nextToken());
+			while (st.hasMoreTokens()) queue.offer(Integer.parseInt(st.nextToken()));
 		}
-		
-		Arrays.sort(numbers);
+	}
+	
+	public static void solve() {
+		while (--N > 0) queue.poll();
+		System.out.println(queue.poll());
 	}
 }
