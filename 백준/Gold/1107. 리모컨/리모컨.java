@@ -29,14 +29,15 @@ public class Main {
 	}
 	
 	public static void solve() {
-		for (int current = 0; current < (N + 1) * 10; current++) {
-			boolean flag = true;
+		for (int current = 0; current < 1_000_000; current++) {
+			boolean flag = true;  // 만들 수 있는 수자인지 확인
 			String now = String.valueOf(current);
 			
 			for (int i = 0; i < now.length() && flag; i++) flag = isAvailableNumber(now.charAt(i));
 			
-			if (!flag) continue;
+			if (!flag) continue;  // 만들 수 없는 숫자라면 pass
 			
+            // 만들 수 있는 숫자면 ++ 또는 --로 크기 확인
 			int res = Math.abs(N - current) + now.length();
 			ans = ans < res ? ans : res;
 		}
