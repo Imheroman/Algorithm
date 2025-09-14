@@ -3,15 +3,14 @@ import java.util.*;
 
 public class Main {
 	static BufferedReader br;
-	static int N;
     static long ans;
-	static int[] parents;
-	static Edge[] edges;
+	static int N;
+	static List<Node>[] nodes;
 	
 	public static void main(String[] args) throws IOException {
 		br = new BufferedReader(new InputStreamReader(System.in));
 		init();
-		solve();
+		prim();
 		System.out.println(ans);			
 	}
 	
@@ -20,60 +19,49 @@ public class Main {
 		ans = 0;
 		
 		N = Integer.parseInt(br.readLine());
-		edges = new Edge[N * N];
-		parents = new int[N + 1];
+		
+		nodes = new List[N + 1];
+		for (int i = 0; i < N + 1; i++) nodes[i] = new ArrayList<>();
 		
 		StringTokenizer st;
-		int cur = 0;
 		for (int from = 1; from < N + 1; from++) {
 			st = new StringTokenizer(br.readLine());
 			for (int to = 1; to < N + 1; to++)
-				edges[cur++] = new Edge(from, to, Integer.parseInt(st.nextToken()));  // edge 만들기
+				nodes[from].add(new Node(to, Integer.parseInt(st.nextToken())));
+		}
+	}
+	
+	static void prim() {
+		Queue<Node> queue = new PriorityQueue<>();
+		boolean[] visited = new boolean[N + 1];
+		
+		queue.offer(new Node(1, 0));  // 1부터 시작한다고 임의로 배정
+		
+		while (!queue.isEmpty()) {
+			Node cur = queue.poll();
 			
-			parents[from] = from;  // 각 인덱스의 parents를 본인으로 설정
-		}
-		
-		Arrays.sort(edges);  // 최소 비용의 간선을 얻기 위해 sort
-	}
-	
-	static void solve() {
-		int cnt = 0;
-		for (Edge e : edges) {
-			if (cnt == N - 1) break;  // 간선이 다 선택되면 break
-			if (e.from == e.to || !union(e.from, e.to)) continue;  // 유니온 실패하면 continue
-			ans += e.weight;  // 아직 선택되지 않은 노드가 나오면 weight 추가
-			++cnt;  // 간선 추가
+			if (visited[cur.to]) continue;  // 방문한 적 있는 노드면 continue
+            
+			visited[cur.to] = true;  // 방문한 적 없는 노드면 방문 처리 후
+			ans += cur.weight;  // 비용 증가
+			
+			for (Node node : nodes[cur.to]) {  // 현재 방문한 노드에서 방문할 수 있는 노드들 찾기
+				if (visited[node.to]) continue;  // 만약 방문했으면 갈 필요 없음
+				queue.offer(node);  // 방문 안 한 노드들 다 queue에 추가 -> PQ로 최소 비용 관리
+			}
 		}
 	}
-	
-	static int find(int cur) {
-		if (parents[cur] == cur) return cur;
-		return parents[cur] = find(parents[cur]);
-	}
-	
-	static boolean union(int a, int b) {
-		int aroot = find(a);
-		int broot = find(b);
-		
-		if (aroot == broot) return false;
-		
-		if (aroot > broot) parents[aroot] = broot;  // aroot가 더 크면 aroot의 parent를 broot로
-		else parents[aroot] = broot;  // broot가 더 크면 ? broot의 parent를 aroot로
-		
-		return true;  // union 성공
-	}
 
-	static class Edge implements Comparable<Edge> {  // 간선 정보를 저장하는 class
-		int from, to, weight;
+	static class Node implements Comparable<Node>{
+		int to, weight;
 
-		public Edge(int from, int to, int weight) {
-			this.from = from;
+		public Node(int to, int weight) {
 			this.to = to;
 			this.weight = weight;
 		}
 
 		@Override
-		public int compareTo(Edge o) {
+		public int compareTo(Node o) {
 			return Integer.compare(this.weight, o.weight);
 		}
 	}
