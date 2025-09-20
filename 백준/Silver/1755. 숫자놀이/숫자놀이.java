@@ -13,9 +13,8 @@ public class Main {
 		init();
 		solve();
 		System.out.println(sb);			
-	}
-	
-
+    }
+    
 	static void init() throws IOException {
 		sb = new StringBuilder();
 		keyset = new TreeSet<>();
@@ -40,18 +39,8 @@ public class Main {
 	}
 	
 	static String makeKey(int n) {
-		if (n <= 10) return NUMBER_DIRECTION[n]; 
-        
-		StringBuilder key = new StringBuilder();
-		String number = "";
-		while (n > 0) {
-			number = number.concat(NUMBER_DIRECTION[n % 10]).concat(" ");
-			n /= 10;
-		}
-        
-		String[] res = number.split(" ");
-		for (int i = res.length - 1; i >= 0; i--) key.append(res[i]);
-		
-		return key.toString();
+		return n <= 10 ? NUMBER_DIRECTION[n] : 
+        NUMBER_DIRECTION[n / 10].concat(NUMBER_DIRECTION[n % 10]);
 	} 
+	
 }
