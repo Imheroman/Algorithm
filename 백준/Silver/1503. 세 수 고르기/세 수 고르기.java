@@ -1,6 +1,7 @@
 import java.io.*;
 import java.util.*;
 
+// 지피티가 가지치기 알려준 코드 테스트
 public class Main {
 	static BufferedReader br;
 	static final int MAX_NUMBER = 1_001, MAX_DEPTH = 3, MAX = 1_999_999_999;
@@ -43,14 +44,15 @@ public class Main {
 		System.out.println(ans);
 	}
 	
-	static void bt(int start, int depth, int res) {
-		if (depth == MAX_DEPTH) {
-			int result = Math.abs(N - res);
-			ans = ans < result ? ans : result; 
-			return;
-		}
-			
-		for (int i = start; i < numbers.length; i++)
-			bt(i, depth + 1, res * numbers[i]);
-	}
+	static void bt(int start, int depth, long res) {
+        if (depth == 3) {
+            ans = Math.min(ans, (int)Math.abs(N - res));
+            return;
+        }
+        for (int i = start; i < numbers.length; i++) {          // 오름차순 순회로 변경 // Changed
+            long next = res * numbers[i];
+            if (next - N > ans) break;                       // 단조성 기반 가지치기 // Changed
+            bt(i, depth + 1, next);
+        }
+    }
 }
