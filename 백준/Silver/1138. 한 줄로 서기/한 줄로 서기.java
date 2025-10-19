@@ -20,6 +20,8 @@ import java.util.*;
 실은 이해가 잘 되진 않음 
 https://velog.io/@guswlsdl0121/%EB%B0%B1%EC%A4%80-1138%EB%B2%88-%ED%95%9C-%EC%A4%84%EB%A1%9C-%EC%84%9C%EA%B8%B0-with-Java
 그림으로 잘 설명해주셨음 
+
+https://www.acmicpc.net/source/99479792 -> 이분 코드가 더 쉬움 ..
  */
 public class Main {
 	static BufferedReader br;
@@ -40,19 +42,9 @@ public class Main {
 	}
 
 	static void solve(int[] people, int N) {
-		int[] answer = new int[N];
-		for (int cur = 0; cur < N; cur++) {  // 현재 차례의 사람 
-			int taller = 0;  // 나보다 키 큰 사람 카운트 
-			
-			for (int p = 0; p < N; p++) {  // 방문하는 사람
-				if (answer[p] == 0 && people[cur] == taller) {  // 해당 자리가 비었고, 나보다 키큰 사람의 카운트가 동일할 때
-					answer[p] = cur + 1;
-					break;
-				}
-				else if (answer[p] == 0) ++taller;
-			}
-		}
-		
-		for (int number : answer) System.out.print(number + " ");
+		List<Integer> ans = new ArrayList<>(); // 줄을 세울 ArrayList line		
+		for(int i = N - 1; i >= 0; i--) ans.add(people[i], i + 1); //키가 i인 사람을 인덱스 tall[i]번째에 삽입한다
+        
+		for (int number : ans) System.out.print(number + " ");
 	}
 }
