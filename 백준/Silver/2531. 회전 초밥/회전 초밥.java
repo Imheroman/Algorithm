@@ -3,7 +3,6 @@ import java.util.*;
 
 public class Main {
 	static BufferedReader br;
-	static StringBuilder sb = new StringBuilder();
 	static StringTokenizer st;
 	static int N, D, K, C;
 	
@@ -26,16 +25,29 @@ public class Main {
 	}
  
 	static void solve(int[] graphs) {
-		int ans = 0;
-		Set<Integer> set = new HashSet<>();
+		int ans = 0, cnt = 0;
+		int[] visited = new int[D + 1];
 		
-		for (int i = 0; i < N; i++) {
-			for (int j = i; j < i + K; j++) set.add(graphs[j % N]);
-
-			int size = set.contains(C) ? set.size() : set.size() + 1;
-			ans = ans > size ? ans : size;
+		for (int i = 0; i < K; i++) {
+			int cur = graphs[i];
+			++visited[cur];
 			
-			set.clear();
+			if (visited[cur] == 1) ++cnt;
+		}
+		
+		ans = visited[C] == 0 ? cnt + 1 : cnt;
+		for (int cur = K; cur < N + K; cur++) {
+			int head = graphs[(cur - K) % N];
+			int tail = graphs[cur % N];
+			
+			--visited[head];
+			if (visited[head] == 0) --cnt;
+			
+			++visited[tail];
+			if (visited[tail] == 1) ++cnt;
+			
+			int res = visited[C] == 0 ? cnt + 1 : cnt;
+			ans = Math.max(ans, res);
 		}
 		
 		System.out.println(ans);
