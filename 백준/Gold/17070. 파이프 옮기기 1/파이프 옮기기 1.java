@@ -3,11 +3,13 @@ import java.util.*;
 
 public class Main {
 	static BufferedReader br;
-	static StringBuilder sb = new StringBuilder();
 	static StringTokenizer st;
-	static int N, ans;
+	static final int MAX_VALUE = 1_999_999_999;
+	static int N;
 	static int[][] graphs, DIRECTIONS = {{0, 1}, {1, 0}, {1, 1}};
 	static Map<Integer, int[]> DIRECTIONS_MAP = new HashMap<>();
+	static int[][][] memoization;
+	
 	
 	static {
 		DIRECTIONS_MAP.put(0, new int[] {0, 2});
@@ -21,30 +23,28 @@ public class Main {
 	}
 
 	static void init() throws IOException {
-		ans = 0;
-		
 		N = Integer.parseInt(br.readLine());
-		
 		graphs = new int[N][N];
+		
 		for (int i = 0; i < N; i++) {
 			st = new StringTokenizer(br.readLine());
 			for (int j = 0; j < N;j ++) graphs[i][j] = Integer.parseInt(st.nextToken());
 		}
 		
-		solve();
-	}
-  
-	static void solve() {
-		bt(0, 1, 0);
-		System.out.println(ans);
-	}
-
-	private static void bt(int x, int y, int preDirection) {
-		if (x == N - 1 && y == N - 1) {
-			++ans;
-			return;
+		memoization = new int[DIRECTIONS.length][N][N];
+		for (int d = 0; d < DIRECTIONS.length; d++) {
+			for (int x = 0; x < N; x++) Arrays.fill(memoization[d][x], MAX_VALUE);
 		}
-      
+		
+		System.out.println(bt(0, 1, 0));
+	}
+	
+	private static int bt(int x, int y, int preDirection) {
+		if (x == N - 1 && y == N - 1) return 1; 
+		if (memoization[preDirection][x][y] != MAX_VALUE) return memoization[preDirection][x][y];
+		
+		memoization[preDirection][x][y] = 0;
+		
 		for (int d : DIRECTIONS_MAP.get(preDirection)) {
 			int nx = x + DIRECTIONS[d][0], ny = y + DIRECTIONS[d][1];
 
@@ -57,8 +57,10 @@ public class Main {
 			}
 			else if (!isValidRange(nx, ny) || graphs[nx][ny] == 1) continue;
 			
-			if (flag) bt(nx, ny, d);
+			if (flag) memoization[preDirection][x][y] += bt(nx, ny, d);
 		}
+		
+		return memoization[preDirection][x][y];
 	}
 	
 	static boolean isValidRange(int x, int y) {
