@@ -1,62 +1,55 @@
 import java.io.*;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class Main {
-	private static final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-	private static StringTokenizer st;
-
-	public static void main(String[] args) throws IOException {
-		st = input();
-		int N = getInt(st), d = getInt(st), k = getInt(st), c = getInt(st);
-		int[] belts = new int[N];
-		int[] memorization = new int[d + 1];
-		
-		int count = 0;
-		for (int i = 0; i < N; i++) {
-			int current = getInt();
-			
-			if (i < k) {
-				if (memorization[current] == 0) {
-					count++;					
-				}
-				memorization[current]++;
-			}
-			
-			belts[i] = current;
-		}
-		
-		int answer = memorization[c] == 0 ? count + 1 : count;
-		for (int i = k; i < N + k; i++) {
-			int current = belts[i % N];
-			
-			memorization[belts[(i - k) % N]]--;
-			
-			if (memorization[belts[(i - k) % N]] == 0) {
-				count--;
-			}
-			
-			memorization[current]++;
-			
-			if (memorization[current] == 1) {
-				count++;
-			}
-			
-			answer = Math.max(answer, memorization[c] == 0 ? count + 1 : count);
-		}
-		
-		System.out.println(answer);
-	}
+	static BufferedReader br;
+	static StringTokenizer st;
+	static int N, D, K, C;
 	
-	public static StringTokenizer input() throws IOException {
-		return new StringTokenizer(br.readLine());
+	public static void main(String[] args) throws IOException {
+		br = new BufferedReader(new InputStreamReader(System.in));
+		init();
 	}
 
-	public static int getInt(StringTokenizer s) {
-		return Integer.parseInt(s.nextToken());
+	static void init() throws IOException {
+		st = new StringTokenizer(br.readLine());
+		N = Integer.parseInt(st.nextToken());
+		D = Integer.parseInt(st.nextToken());
+		K = Integer.parseInt(st.nextToken());
+		C = Integer.parseInt(st.nextToken());
+				
+		int[] graphs = new int[N];
+		for (int i = 0; i < N; i++) graphs[i] = Integer.parseInt(br.readLine());
+		
+		solve(graphs);
 	}
-
-	public static int getInt() throws IOException {
-		return Integer.parseInt(br.readLine());
+ 
+	static void solve(int[] graphs) {
+		int ans = 0, cnt = 0;
+		int[] visited = new int[D + 1];
+		
+		for (int i = 0; i < K; i++) {
+			int cur = graphs[i];
+			++visited[cur];
+			
+			if (visited[cur] == 1) ++cnt;
+		}
+		
+		ans = visited[C] == 0 ? cnt + 1 : cnt;
+		for (int cur = K; cur < N + K; cur++) {
+			int head = graphs[(cur - K) % N];
+			int tail = graphs[cur % N];
+			
+			--visited[head];
+			if (visited[head] == 0) --cnt;
+			
+			++visited[tail];
+			if (visited[tail] == 1) ++cnt;
+			
+			int res = visited[C] == 0 ? cnt + 1 : cnt;
+			ans = Math.max(ans, res);
+		}
+		
+		System.out.println(ans);
 	}
 }
