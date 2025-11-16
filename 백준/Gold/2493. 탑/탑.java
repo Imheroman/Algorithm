@@ -2,49 +2,37 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
-	private static final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-	private static StringTokenizer st;
+    static BufferedReader br;
+    static StringBuilder sb;
 
-	public static void main(String[] args) throws IOException {
-		int N = getInt();
-		int[] tops = new int[N];
-		int[] answer = new int[N];
-		List<Integer> stack = new ArrayList();
+    public static void main(String[] args) throws IOException {
+        br = new BufferedReader(new InputStreamReader(System.in));
+        init();
+    }
 
-		st = input();
-		for (int i = 0; i < N; i++) {
-			tops[i] = getInt(st);
-		}
+    static void init() throws IOException {
+        sb = new StringBuilder();
         
-		for (int i = 0; i < N; i++) {
-			while (!stack.isEmpty() && tops[stack.get(stack.size() - 1)] <= tops[i]) {
-				stack.remove(stack.size() - 1);
-			}
-
-			if (!stack.isEmpty()) {
-				answer[i] = stack.get(stack.size() - 1) + 1;
-			}
-			
-			stack.add(i);
-		}
-
-        StringBuilder sb = new StringBuilder();
-		for (int number : answer) {
-            sb.append(number).append(" ");
-		}
+        int N = Integer.parseInt(br.readLine());
+        int[] towers = new int[N];
+        
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        for (int i = 0; i < N; i++) towers[i] = Integer.parseInt(st.nextToken());
+        
+        solve(N, towers);
+    }
+    
+    // 1. stack이 비어있지 않으면 나보다 큰 타워가 나올 때 까지 확인 
+    static void solve(int N, int[] towers) {
+        ArrayDeque<Integer> stack = new ArrayDeque<>();
+        
+        for (int cur = 0; cur < N; cur++) {
+            while (!stack.isEmpty() && towers[cur] >= towers[stack.peekLast()]) stack.pollLast();
+            
+            sb.append(stack.isEmpty() ? 0 : stack.peekLast() + 1).append(" ");
+            stack.offer(cur);
+        }
         
         System.out.println(sb);
-	}
-
-	public static StringTokenizer input() throws IOException {
-		return new StringTokenizer(br.readLine());
-	}
-
-	public static int getInt(StringTokenizer s) {
-		return Integer.parseInt(s.nextToken());
-	}
-
-	public static int getInt() throws IOException {
-		return Integer.parseInt(br.readLine());
-	}
+    }
 }
