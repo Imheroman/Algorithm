@@ -21,20 +21,23 @@ public class Main {
 		visited = new int[N + 1];
 		
 		st = new StringTokenizer(br.readLine());
-		for (int i = 1; i < N + 1; i++) visited[i] = Integer.parseInt(st.nextToken()) + visited[i - 1];
+		for (int i = 0; i < N; i++) visited[i] = Integer.parseInt(st.nextToken());
 		
 		solve();
 	}
 	
 	static void solve() {
-		int max = 0, cnt = 0;
-		for (int i = 0; i < N - X + 1; i++) {
-			int sum = visited[i + X] - visited[i];
+		int sum = 0;
+		for (int i = 0; i < X; i++) sum += visited[i];
+		
+		int max = sum, cnt = 1;
+		for (int i = X; i < N; i++) {
+			sum += visited[i] - visited[i - X];
 			
 			if (sum == max) ++cnt;
 			else if (sum > max) {
-                cnt = 1;
-                max = sum;
+              cnt = 1;
+              max = sum;
             }
 		}
 		
