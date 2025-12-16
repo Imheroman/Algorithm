@@ -38,7 +38,7 @@ public class Main {
 	
 	static String createPrefix(int size) {
 		StringBuilder s = new StringBuilder();
-		for (int i = 0; i < size * 4; i++) s.append("_");
+		for (int i = 0; i < size; i++) s.append("____");
 		return s.toString();
 	}
 }
