@@ -1,51 +1,44 @@
 import java.io.*;
 import java.util.*;
-import java.util.stream.*;
 
 public class Main {
-	private static final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-	private static StringTokenizer st;
-
+	private static BufferedReader br; 
+	
 	public static void main(String[] args) throws IOException {
-		int n = getInt();
-		int[] numbers = new int[n];
-		
-		st = input();
-		for (int i = 0; i < n; i++) {
-			numbers[i] = getInt(st);
-		}
-		Arrays.sort(numbers);
-		
-		int[] answer = new int[2];
-		int l = 0, r = n - 1, result = Integer.MAX_VALUE;
-		while (l < r) {
-			int current = numbers[l] + numbers[r];
-			
-			if (Math.abs(current) < result) {
-				answer[0] = numbers[l];
-				answer[1] = numbers[r];
-				result = Math.abs(current);
-			}
-			
-			if (current > 0) {
-				r--;
-			} else {
-				l++;
-			}
-		}
-		
-		System.out.println(answer[0] + " " + answer[1]);
+		br = new BufferedReader(new InputStreamReader(System.in));
+		init();
 	}
 	
-	public static StringTokenizer input() throws IOException {
-		return new StringTokenizer(br.readLine());
+	private static void init() throws IOException {
+		int N = Integer.parseInt(br.readLine());
+		int[] numbers = new int[N];
+		
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		for (int i = 0; i < numbers.length; i++) numbers[i] = Integer.parseInt(st.nextToken());
+		
+		Arrays.sort(numbers);
+		solve(N, numbers);
 	}
 
-	public static int getInt(StringTokenizer s) {
-		return Integer.parseInt(s.nextToken());
-	}
-
-	public static int getInt() throws IOException {
-		return Integer.parseInt(br.readLine());
+	static void solve(int N, int[] numbers) {
+		int minId = 0, maxId = N - 1;
+		int head = 0, tail = N - 1;
+		int result = Integer.MAX_VALUE;
+		
+		while (head < tail && result != 0) {
+			int sum = numbers[head] + numbers[tail];
+            
+			if (result > Math.abs(sum)) {  // result 갱신
+				result = Math.abs(sum);
+				minId = head;
+				maxId = tail;
+			}
+			
+            // 포인터 이동
+			if (sum > 0) --tail;
+			else ++head;
+		} 
+		
+		System.out.println(numbers[minId] + " " + numbers[maxId]);
 	}
 }
